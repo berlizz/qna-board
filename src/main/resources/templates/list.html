@@ -41,6 +41,30 @@
   </div><!-- /.container-fluid -->
 </nav>
 
+<div class="container">
+	<table class="table table-condensed">
+		<thead>
+			<tr>
+				<th>사용자 ID</th>
+				<th>이름</th>
+				<th>이메일</th>
+			</tr>
+		</thead>
+		{{#users}}
+		<tbody>
+			<tr>
+				<th scope="row">{{userId}}</th>
+				<td>{{name}}</td>
+				<td>{{email}}</td>
+			</tr>
+		</tbody>
+		{{/users}}
+	</table>
+</div>
+
+
+
+
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="/webjars/jquery/3.2.1/jquery.min.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
