@@ -1,7 +1,18 @@
-package com.berlizz.web;
+package com.berlizz.domain;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+
+@Entity
 public class User {
 
+	@Id  // primary key 지정
+	@GeneratedValue  // 자동으로 1씩 증가
+	private Long id;
+	
+	@Column(nullable=false, length=20)
 	private String userId;
 	private String password;
 	private String name;
@@ -42,6 +53,13 @@ public class User {
 
 	public void setEmail(String email) {
 		this.email = email;
+	}
+
+	public void update(User updateUser) {
+		this.userId = updateUser.getUserId();
+		this.password = updateUser.getPassword();
+		this.name = updateUser.getName();
+		this.email = updateUser.getEmail();
 	}
 
 }
