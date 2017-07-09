@@ -9,7 +9,7 @@ import javax.persistence.Id;
 public class User {
 
 	@Id  // primary key 지정
-	@GeneratedValue  // 자동으로 1씩 증가
+	@GeneratedValue  // 자동으로 1씩 증가(auto_increment)
 	private Long id;
 	
 	@Column(nullable=false, length=20)
