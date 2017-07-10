@@ -11,9 +11,10 @@ public class User {
 	@Id  // primary key 지정
 	@GeneratedValue  // 자동으로 1씩 증가(auto_increment)
 	private Long id;
-	
-	@Column(nullable=false, length=20)
+
+	@Column(nullable=false, length=20, unique=true) // unique=true는 중복 불가 선언
 	private String userId;
+	
 	private String password;
 	private String name;
 	private String email;
@@ -21,6 +22,14 @@ public class User {
 	@Override
 	public String toString() {
 		return "Users [userId=" + userId + ", password=" + password + ", name=" + name + ", email=" + email + "]";
+	}
+	
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public String getUserId() {
@@ -60,6 +69,22 @@ public class User {
 		this.password = updateUser.getPassword();
 		this.name = updateUser.getName();
 		this.email = updateUser.getEmail();
+	}
+	
+	public boolean matchPassword(String newPassword) {
+		if(newPassword == null) {
+			return false;
+		}
+		
+		return newPassword.equals(password);
+	}
+	
+	public boolean matchId(Long newId) {
+		if(newId == null) {
+			return false;
+		}
+		
+		return newId == id;
 	}
 
 }

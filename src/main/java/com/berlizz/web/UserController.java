@@ -56,16 +56,34 @@ public class UserController {
 	}
 	
 	@GetMapping("/{id}/form")
-	public String updateForm(@PathVariable Long id, Model model) {
+	public String updateForm(@PathVariable Long id, Model model, HttpSession session) throws IllegalAccessException {
+		if(!HttpSessionUtils.isLoginUser(session)) {
+			return "redirect:/users/login";
+		}
+		
+		User sessionedUser = HttpSessionUtils.getUserFromSession(session);
+		if(!sessionedUser.matchId(id)) {
+			throw new IllegalAccessException("you can't update the another user");
+		}
+		
 		model.addAttribute("user", userRepository.findOne(id));
 		
 		return "/user/updateForm";
 	}
 	
 	@PutMapping("/{id}")
-	public String update(@PathVariable Long id, User updateUser) {
+	public String update(@PathVariable Long id, User updatedUser, HttpSession session) throws IllegalAccessException {
+		if(!HttpSessionUtils.isLoginUser(session)) {
+			return "redirect:/users/login";
+		}
+		
+		User sessionedUser = HttpSessionUtils.getUserFromSession(session);
+		if(!sessionedUser.matchId(id)) {
+			throw new IllegalAccessException("you can't update the another user");
+		}
+		
 		User user = userRepository.findOne(id);
-		user.update(updateUser);
+		user.update(updatedUser);
 		userRepository.save(user);
 		
 		return "redirect:/users";
@@ -78,11 +96,18 @@ public class UserController {
 			return "redirect:/users/login";
 		}
 		
-		if(!password.equals(user.getPassword())) {
+		if(!user.matchPassword(password)) {
 			return "redirect:/users/login";
 		}
 		
-		session.setAttribute("user", user);
+		session.setAttribute(HttpSessionUtils.USER_SESSION_KEY, user);
+		
+		return "redirect:/";
+	}
+	
+	@GetMapping("/logout")
+	public String logout(HttpSession session) {
+		session.removeAttribute(HttpSessionUtils.USER_SESSION_KEY);
 		
 		return "redirect:/";
 	}
