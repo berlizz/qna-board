@@ -2,36 +2,31 @@ package com.berlizz.domain;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Entity
-public class User {
-
-	@Id  // primary key 지정
-	@GeneratedValue  // 자동으로 1씩 증가(auto_increment)
-	private Long id;
+public class User extends AbstractEntity {
 
 	@Column(nullable=false, length=20, unique=true) // unique=true는 중복 불가 선언
+	@JsonProperty
 	private String userId;
 	
+	@JsonIgnore    // json으로 변환 시 제외시킴
 	private String password;
+	
+	@JsonProperty
 	private String name;
+	
+	@JsonProperty
 	private String email;
 
 	@Override
 	public String toString() {
-		return "Users [userId=" + userId + ", password=" + password + ", name=" + name + ", email=" + email + "]";
+		return "Users [" + super.toString() + ", password=" + password + ", name=" + name + ", email=" + email + "]";
 	}
 	
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
 	public String getUserId() {
 		return userId;
 	}
@@ -84,32 +79,7 @@ public class User {
 			return false;
 		}
 		
-		return newId == id;
-	}
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((id == null) ? 0 : id.hashCode());
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		User other = (User) obj;
-		if (id == null) {
-			if (other.id != null)
-				return false;
-		} else if (!id.equals(other.id))
-			return false;
-		return true;
+		return newId.equals(getId());
 	}
 
 }
